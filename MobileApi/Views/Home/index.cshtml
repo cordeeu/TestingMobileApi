@@ -7,22 +7,32 @@
 
 <body>
     @{
-        string dynamicUrl = HttpContext.Current.Request.Url.Host +":" +HttpContext.Current.Request.Url.Port;
-        string dynamicUrl2 = HttpContext.Current.Request.Url.AbsoluteUri;
+    string dynamicUrl = HttpContext.Current.Request.Url.Host + ":" + HttpContext.Current.Request.Url.Port;
+    string dynamicUrl2 = HttpContext.Current.Request.Url.AbsoluteUri;
 
-        }
+    }
     <div style="margin-bottom:30px">
         <h2>Mobile Database API</h2>
         <ul id="pumas" />
     </div>
 
-    <div style="padding:10px">
-        <div style="margin-bottom:10px">
-            <h2>Login To Update Data</h2>
-            <label>Key</label>
-            <input id="api_key_in" type="text" placeholder="API KEY" style="margin-right:10px" />
-            <input type="button" value="Submit" onclick="validateKey();" />
-        </div>
+    <div class="row">
+        <section>
+            <form method="post" enctype="multipart/form-data"
+                  asp-controller="UploadFiles" asp-action="Index">
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <p>Upload one or more files using this form:</p>
+                        <input id="api_file_in" type="file" name="files" multiple /> <!--remove MULTIPLEe for single file upload-->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-10">
+                        <input type="submit" value="Upload" onclick="doSumpIn()" />
+                    </div>
+                </div>
+            </form>
+        </section>
     </div>
 
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
@@ -31,34 +41,28 @@
 
 
 
-        function validateKey() {
+        function doSumpIn() {
 
-            var keyInput = $('#api_key_in').val();
+            //var fileInput = $('#api_file_in').val();
 
-            $.get("@dynamicUrl" + "/Home/ValidateKey", { key: keyInput }, function (data) {
-                alert("Data: " + data);
-            });
-
-
-            $.get("@dynamicUrl" + "/Home/Index2");
+            var fileInput = $('#api_file_in').get(0);
 
             $.ajax({
                 type: "GET",
-                url: "@dynamicUrl"+"/Home/ValidateKey", // the method we are calling
+                url: "/Home/UploadFile", // the method we are calling
                 contentType: "application/json; charset=utf-8",
-                data: { key: keyInput },
+                data: { uploadFile: fileInput },
                 dataType: "json",
-                success: function (result) {
-                    console.log(result);
+                success: function (msg) {
+                    console.log("WIN :" + fileInput);
                 },
-                error: function (result) {
-                    console.log("@dynamicUrl"+"/Home/ValidateKey");
-
-                    console.log(result);
+                error: function (msg) {
+                    console.log("FAIL :" + fileInput);
+                    //console.log(msg);
                 }
             });
 
-    }
+        }
     </script>
 </body>
 </html>

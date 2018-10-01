@@ -59,5 +59,75 @@ namespace MobileApi.Controllers
                else*/
             return View("~/Views/Home/index.cshtml");
         }
+
+        [HttpGet]
+        public ActionResult copySpecificFile(String uploadFile)
+        {
+
+            string nameNew = "farts.txt";
+            if (uploadFile == null)
+            {
+               nameNew = "nullCunt.txt";
+            }
+            else
+            {
+                nameNew = uploadFile+".txt";
+            }
+        
+            string FileToCopy = null;
+            string NewCopy = null;
+
+            FileToCopy = "C:\\Temp\\Farts\\Toots.txt";
+            NewCopy = "C:\\Temp\\Toots\\" + nameNew; // Farts.txt";
+
+
+            if (System.IO.File.Exists(FileToCopy) == true && !System.IO.File.Exists(NewCopy))
+            {
+                System.IO.File.Copy(FileToCopy, NewCopy);
+            }
+            else if (System.IO.File.Exists(FileToCopy) == true && System.IO.File.Exists(NewCopy))
+            {
+                System.IO.File.Delete(NewCopy);
+            }
+
+            return null;
+            //return View("/Views/Home/index.cshtml");
+        }
+        [HttpGet]
+        public ActionResult UploadFile(FileResult uploadFile)
+        {
+            string FileToCopy = null;
+            string NewCopy = null;
+
+
+            if (uploadFile == null)
+            {
+                FileToCopy = "C:\\Temp\\Farts\\Toots.txt";
+                NewCopy = "C:\\Temp\\Toots\\NullFarts.txt";
+
+            }
+            else if (uploadFile.FileDownloadName.Equals(""))
+            {
+                FileToCopy = "C:\\Temp\\Farts\\Toots.txt";
+                NewCopy = "C:\\Temp\\Toots\\BlankFarts.txt";
+            }
+            else
+            {
+                FileToCopy = uploadFile.FileDownloadName;
+                NewCopy = "C:\\Temp\\Toots\\Darts.txt";
+            }
+
+            if (System.IO.File.Exists(FileToCopy) == true && !System.IO.File.Exists(NewCopy))
+            {
+                System.IO.File.Copy(FileToCopy, NewCopy);
+            }
+            else if (System.IO.File.Exists(FileToCopy) == true && System.IO.File.Exists(NewCopy))
+            {
+                System.IO.File.Delete(NewCopy);
+            }
+
+            return null;
+            //return View("/Views/Home/index.cshtml");
+        }
     }
 }
